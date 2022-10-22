@@ -1,0 +1,6 @@
+**/.DS_Store
+.DS_Store
+obj/
+bin/
+.vscode/
+output.bin

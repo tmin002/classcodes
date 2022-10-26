@@ -1,6 +1,7 @@
-package gui;
+package lcsfind.gui;
 import java.io.File;
 import javax.swing.*;
+import java.util.ArrayList;
 
 public class MainWindow extends JFrame {
     public MainWindow() {
@@ -8,10 +9,11 @@ public class MainWindow extends JFrame {
         setLayout(null);
         setVisible(true);
 
-        for (int i=0; i<30; i++) {
+
+        /*for (int i=0; i<30; i++) {
             ResultAtomPanel aa = new ResultAtomPanel(new File("/Users/tmin002/workspace/lcsfind/lcsfind/README.md"));
             add(aa);
             aa.setBounds(0, 60*i, 500, 55);
-        }
+        }*/
     }
 }

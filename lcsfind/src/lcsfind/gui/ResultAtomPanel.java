@@ -1,7 +1,6 @@
-package gui;
+package lcsfind.gui;
 import java.io.File;
 import javax.swing.*;
-import javax.swing.event.MouseInputListener;
 
 import java.awt.*;
 

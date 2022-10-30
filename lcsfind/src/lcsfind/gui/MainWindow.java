@@ -7,7 +7,7 @@ import java.awt.event.*;
 public class MainWindow extends JFrame {
 
     private JLabel fileNameLabel = new JLabel("File name to search: ");
-    private JLabel fromPathLabel = new JLabel("Serach from: ");
+    private JLabel fromPathLabel = new JLabel("Search from: ");
 
     private JTextField fileNameText = new JTextField("", 50);
     private JTextField fromPathText = new JTextField("", 50);

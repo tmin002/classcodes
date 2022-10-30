@@ -17,7 +17,7 @@ public class LcsSearch {
             result.add(f);
          }
          if (f.isDirectory()) {
-            result.addAll(LcsSearch.search(f.getAbsolutePath(), fileName));
+            result.addAll(search(f.getAbsolutePath(), fileName));
          } 
       }
 
@@ -29,6 +29,10 @@ public class LcsSearch {
       int f1l = fileName1.length();
       int f2l = fileName2.length();
       int i=0, j=0;
+
+	  // Case insensitive
+	  fileName1 = fileName1.toLowerCase();
+	  fileName2 = fileName2.toLowerCase();
 
       // Don't check file extensions
       //fileName1 = fileName1.substring(0, fileName1.lastIndexOf('.'));
@@ -52,6 +56,6 @@ public class LcsSearch {
 
       // Return result
       int result = l[i-1][j-1];
-      return result >= f2l;
+      return result == f2l;
    }
 }

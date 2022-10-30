@@ -87,6 +87,7 @@ public class MainWindow extends JFrame {
         // final
         setSize(500, 500);
         setTitle("lcsfind");
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
         setVisible(true);
 
     }

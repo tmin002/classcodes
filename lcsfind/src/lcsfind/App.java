@@ -1,5 +1,4 @@
 package lcsfind;
-import java.util.Scanner;
 import lcsfind.gui.MainWindow;
 
 public class App {

@@ -1,8 +1,8 @@
 package lcsfind.gui;
+
 import java.io.*;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
 
 public class MainWindow extends JFrame {
 
@@ -76,9 +76,7 @@ public class MainWindow extends JFrame {
         //// aboutButton
         rootLayout.putConstraint(SpringLayout.SOUTH, aboutButton, -5, SpringLayout.SOUTH, root);
         rootLayout.putConstraint(SpringLayout.WEST, aboutButton, 15, SpringLayout.WEST, root);
-        aboutButton.addActionListener(e -> {
-            msgBox("Work in progress");
-        });
+        aboutButton.addActionListener(e -> new AboutWindow());
         root.add(aboutButton);
 
 
@@ -98,12 +96,6 @@ public class MainWindow extends JFrame {
         resultScrollPane.repaint();
     }
 
-    // messagebox
-    public void msgBox(String message) {
-        JOptionPane.showMessageDialog(null, message, 
-            "lcsfind", JOptionPane.ERROR_MESSAGE);
-    }
-
     // search
     private void doSearch() {
 
@@ -112,11 +104,11 @@ public class MainWindow extends JFrame {
         String fileName = fileNameText.getText();
 
         if (fileName == null || fileName.length() == 0) {
-            msgBox("Enter search start directory.");
+            MsgBox.show("Enter search start directory.");
             return;
         }
         if (!(new File(fromPath).isDirectory())) {
-            msgBox("Wrong search start path.");
+            MsgBox.show("Wrong search start path.");
             return;
         }
 
@@ -135,7 +127,7 @@ public class MainWindow extends JFrame {
 
         // finish
         if (i == 0) {
-            msgBox("No file/folder found.");
+            MsgBox.show("No file/folder found.");
         }
         resultPanel.setPreferredSize(new Dimension(this.getSize().width, i*40));
         updateResultPanel();

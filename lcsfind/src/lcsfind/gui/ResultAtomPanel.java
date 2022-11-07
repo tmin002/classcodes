@@ -1,6 +1,8 @@
 package lcsfind.gui;
+import lcsfind.CheckOS;
 import java.io.File;
 import javax.swing.*;
+import java.io.IOException;
 import java.awt.event.*;
 import java.awt.*;
 
@@ -51,8 +53,25 @@ public class ResultAtomPanel extends JPanel {
     }    
 
     public void clicked(String filePath) {
-        // TODO: 파일 열기. 'explorer' 프로세스 시작하고 argument로 파일 경로 주면 알아서 열림. 명선담당
-        MsgBox.show(filePath);
+        CheckOS.OS os = CheckOS.getOS();
+        String[] cmd = null;
+
+        try {
+            if (os == CheckOS.OS.WINDOWS) {
+                cmd = new String[] {"explorer", filePath};
+            } else if (os == CheckOS.OS.LINUX || os == CheckOS.OS.SOLARIS) {
+                cmd = new String[] {"xdg-open", filePath};
+            } else if (os == CheckOS.OS.MAC) {
+                cmd = new String[] {"open", filePath};
+            } else {
+                MsgBox.show("Opening files in this operating system is not supported yet.");
+                return;
+            }
+            Runtime.getRuntime().exec(cmd);            
+        } catch (IOException e) {
+            MsgBox.show("error while opening file" + filePath + "\n" + e + ": " + e.getMessage());
+        }
+
     }
 
 }

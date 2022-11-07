@@ -8,16 +8,18 @@ public class MainWindow extends JFrame {
 
     private JLabel fileNameLabel = new JLabel("File name to search: ");
     private JLabel fromPathLabel = new JLabel("Search from: ");
+    private JLabel depthLabel = new JLabel("Search depth (0 for infinity): ");
+
 
     private JTextField fileNameText = new JTextField("", 50);
     private JTextField fromPathText = new JTextField("", 50);
+    private JTextField depthText = new JTextField("", 50);
     private JButton fromPathButton = new JButton("..");
 
     private JPanel resultPanel = new JPanel();
     private JScrollPane resultScrollPane = new JScrollPane(resultPanel);
 
     private JButton doSearchButton = new JButton("search");
-    private JButton aboutButton = new JButton("about");
 
     private SpringLayout rootLayout = new SpringLayout();
 
@@ -49,6 +51,17 @@ public class MainWindow extends JFrame {
         rootLayout.putConstraint(SpringLayout.NORTH, fromPathText, 0, SpringLayout.SOUTH, fileNameText);
         root.add(fromPathText);
 
+        //// depthLabel
+        rootLayout.putConstraint(SpringLayout.EAST, depthLabel, 0, SpringLayout.EAST, fileNameLabel);
+        rootLayout.putConstraint(SpringLayout.NORTH, depthLabel, 5, SpringLayout.SOUTH, fileNameText);
+        root.add(depthLabel);
+
+        //// depthText
+        rootLayout.putConstraint(SpringLayout.WEST, depthText, 0, SpringLayout.EAST, depthLabel);
+        rootLayout.putConstraint(SpringLayout.EAST, depthText, 0, SpringLayout.WEST, fromPathButton);
+        rootLayout.putConstraint(SpringLayout.NORTH, depthText, 0, SpringLayout.SOUTH, fileNameText);
+        root.add(depthText);
+
         //// fromPathButton
         rootLayout.putConstraint(SpringLayout.EAST, fromPathButton, -15, SpringLayout.EAST, root);
         rootLayout.putConstraint(SpringLayout.NORTH, fromPathButton, 0, SpringLayout.NORTH, fromPathText);
@@ -72,13 +85,6 @@ public class MainWindow extends JFrame {
         rootLayout.putConstraint(SpringLayout.EAST, doSearchButton, -15, SpringLayout.EAST, root);
         doSearchButton.addActionListener(e -> doSearch());
         root.add(doSearchButton);
-
-        //// aboutButton
-        rootLayout.putConstraint(SpringLayout.SOUTH, aboutButton, -5, SpringLayout.SOUTH, root);
-        rootLayout.putConstraint(SpringLayout.WEST, aboutButton, 15, SpringLayout.WEST, root);
-        aboutButton.addActionListener(e -> new AboutWindow());
-        root.add(aboutButton);
-
 
         //// errorLabel
 
@@ -118,7 +124,7 @@ public class MainWindow extends JFrame {
 
         // search
         int i = 0;
-        for (File f : lcsfind.LcsSearch.search(fromPath, fileName)) {
+        for (File f : lcsfind.LcsSearch.search(fromPath, fileName, 5)) {
             ResultAtomPanel p = new ResultAtomPanel(f);
             p.setSize(500, 40);
             p.setBounds(0, 40*(i++), 4096, 40);

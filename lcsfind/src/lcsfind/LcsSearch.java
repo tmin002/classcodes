@@ -3,7 +3,7 @@ import java.io.*;
 import java.util.ArrayList;
 
 public class LcsSearch {
-   public static ArrayList<File> search(String fromPath, String fileName) {
+   public static ArrayList<File> search(String fromPath, String fileName, int depth) {
 
       File from = new File(fromPath);
       ArrayList<File> result = new ArrayList<File>();
@@ -16,8 +16,8 @@ public class LcsSearch {
          if (checkFileNameLcsMatch(f.getName(), fileName)) {
             result.add(f);
          }
-         if (f.isDirectory()) {
-            result.addAll(search(f.getAbsolutePath(), fileName));
+         if (f.isDirectory() && depth > 0) {
+            result.addAll(search(f.getAbsolutePath(), fileName, depth--));
          } 
       }
 

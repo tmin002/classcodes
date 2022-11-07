@@ -1,0 +1,6 @@
+[org]
+linux.org 12.12.12.12
+air.org 24.24.24.24
+fire.org 35.35.35.35
+dirt.org 46.46.46.46
+you.org 123.234.123.234

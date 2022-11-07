@@ -1,0 +1,5 @@
+[net]
+daum.net 123.234.98.123
+minecraft.net 123.33.33.33
+admin.net 45,9.234.11
+korea.net 12.33.0.3

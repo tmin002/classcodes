@@ -8,12 +8,13 @@ public class MainWindow extends JFrame {
 
     private JLabel fileNameLabel = new JLabel("File name to search: ");
     private JLabel fromPathLabel = new JLabel("Search from: ");
-    private JLabel depthLabel = new JLabel("Search depth (0 for infinity): ");
+    private JLabel depthLabel = new JLabel("Search depth: ");
 
 
     private JTextField fileNameText = new JTextField("", 50);
     private JTextField fromPathText = new JTextField("", 50);
-    private JTextField depthText = new JTextField("", 50);
+    private JSlider depthSlider = new JSlider(JSlider.HORIZONTAL, 1, 31, 5);
+    private JLabel depthSliderLabel = new JLabel(String.valueOf(depthSlider.getValue()));
     private JButton fromPathButton = new JButton("..");
 
     private JPanel resultPanel = new JPanel();
@@ -31,7 +32,7 @@ public class MainWindow extends JFrame {
 
         //// fileNameLabel 
         rootLayout.putConstraint(SpringLayout.WEST, fileNameLabel, 15, SpringLayout.WEST, root);
-        rootLayout.putConstraint(SpringLayout.NORTH, fileNameLabel,10, SpringLayout.NORTH, root);
+        rootLayout.putConstraint(SpringLayout.NORTH, fileNameLabel,5, SpringLayout.NORTH, fileNameText);
         root.add(fileNameLabel);
 
         //// fileNameText
@@ -42,7 +43,7 @@ public class MainWindow extends JFrame {
 
         //// fromPathLabel
         rootLayout.putConstraint(SpringLayout.EAST, fromPathLabel, 0, SpringLayout.EAST, fileNameLabel);
-        rootLayout.putConstraint(SpringLayout.NORTH, fromPathLabel, 5, SpringLayout.SOUTH, fileNameText);
+        rootLayout.putConstraint(SpringLayout.NORTH, fromPathLabel, 5, SpringLayout.NORTH, fromPathText);
         root.add(fromPathLabel);
 
         //// fromPathText
@@ -53,14 +54,26 @@ public class MainWindow extends JFrame {
 
         //// depthLabel
         rootLayout.putConstraint(SpringLayout.EAST, depthLabel, 0, SpringLayout.EAST, fileNameLabel);
-        rootLayout.putConstraint(SpringLayout.NORTH, depthLabel, 5, SpringLayout.SOUTH, fileNameText);
+        rootLayout.putConstraint(SpringLayout.NORTH, depthLabel, 5, SpringLayout.NORTH, depthSlider);
         root.add(depthLabel);
 
-        //// depthText
-        rootLayout.putConstraint(SpringLayout.WEST, depthText, 0, SpringLayout.EAST, depthLabel);
-        rootLayout.putConstraint(SpringLayout.EAST, depthText, 0, SpringLayout.WEST, fromPathButton);
-        rootLayout.putConstraint(SpringLayout.NORTH, depthText, 0, SpringLayout.SOUTH, fileNameText);
-        root.add(depthText);
+        //// depthSlider
+        rootLayout.putConstraint(SpringLayout.WEST, depthSlider, 0, SpringLayout.EAST, depthLabel);
+        rootLayout.putConstraint(SpringLayout.EAST, depthSlider, -15, SpringLayout.WEST, depthSliderLabel);
+        rootLayout.putConstraint(SpringLayout.NORTH, depthSlider, 0, SpringLayout.SOUTH, fromPathText);
+        depthSlider.addChangeListener(e -> {
+            if (depthSlider.getValue() == depthSlider.getMaximum()) {
+                depthSliderLabel.setText("infinite");
+            } else {
+                depthSliderLabel.setText(String.valueOf(depthSlider.getValue()));
+            }
+        });
+        root.add(depthSlider);
+
+        //// depthSliderLabel
+        rootLayout.putConstraint(SpringLayout.WEST, depthSliderLabel, 15, SpringLayout.WEST, fromPathButton);
+        rootLayout.putConstraint(SpringLayout.NORTH, depthSliderLabel, 5, SpringLayout.NORTH, depthLabel);
+        root.add(depthSliderLabel);
 
         //// fromPathButton
         rootLayout.putConstraint(SpringLayout.EAST, fromPathButton, -15, SpringLayout.EAST, root);
@@ -69,7 +82,7 @@ public class MainWindow extends JFrame {
         root.add(fromPathButton);
 
         //// resultPanel & resultScrollPane
-        rootLayout.putConstraint(SpringLayout.NORTH, resultScrollPane, 5, SpringLayout.SOUTH, fromPathButton);
+        rootLayout.putConstraint(SpringLayout.NORTH, resultScrollPane, 5, SpringLayout.SOUTH, depthSlider);
         rootLayout.putConstraint(SpringLayout.SOUTH, resultScrollPane, 0, SpringLayout.NORTH, doSearchButton);
         rootLayout.putConstraint(SpringLayout.WEST, resultScrollPane, 15, SpringLayout.WEST, root);
         rootLayout.putConstraint(SpringLayout.EAST, resultScrollPane, -15, SpringLayout.EAST, root);
@@ -124,7 +137,12 @@ public class MainWindow extends JFrame {
 
         // search
         int i = 0;
-        for (File f : lcsfind.LcsSearch.search(fromPath, fileName, 5)) {
+        int depth = depthSlider.getValue();
+        if (depth == depthSlider.getMaximum()) {
+            depth = 0;
+        }
+
+        for (File f : lcsfind.LcsSearch.search(fromPath, fileName, depth)) {
             ResultAtomPanel p = new ResultAtomPanel(f);
             p.setSize(500, 40);
             p.setBounds(0, 40*(i++), 4096, 40);

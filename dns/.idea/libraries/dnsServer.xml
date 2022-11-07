@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="dnsServer">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/dnsServer/dnsServer.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

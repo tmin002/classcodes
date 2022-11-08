@@ -64,7 +64,7 @@ public class MainWindow extends JFrame {
         //// depthSlider
         rootLayout.putConstraint(SpringLayout.WEST, depthSlider, 0, SpringLayout.EAST, depthLabel);
         rootLayout.putConstraint(SpringLayout.EAST, depthSlider, -15, SpringLayout.WEST, depthSliderLabel);
-        rootLayout.putConstraint(SpringLayout.NORTH, depthSlider, 10, SpringLayout.SOUTH, fromPathText);
+        rootLayout.putConstraint(SpringLayout.NORTH, depthSlider, 15, SpringLayout.SOUTH, fromPathText);
         depthSlider.addChangeListener(e -> {
             if (depthSlider.getValue() == depthSlider.getMaximum()) {
                 depthSliderLabel.setText("infinite");
@@ -87,7 +87,7 @@ public class MainWindow extends JFrame {
         root.add(fromPathButton);
 
         //// resultPanel & resultScrollPane
-        rootLayout.putConstraint(SpringLayout.NORTH, resultScrollPane, 5, SpringLayout.SOUTH, depthSlider);
+        rootLayout.putConstraint(SpringLayout.NORTH, resultScrollPane, 5, SpringLayout.SOUTH, depthSliderLabel);
         rootLayout.putConstraint(SpringLayout.SOUTH, resultScrollPane, 0, SpringLayout.NORTH, doSearchButton);
         rootLayout.putConstraint(SpringLayout.WEST, resultScrollPane, 15, SpringLayout.WEST, root);
         rootLayout.putConstraint(SpringLayout.EAST, resultScrollPane, -15, SpringLayout.EAST, root);

@@ -4,7 +4,7 @@ import glob, os, sys
 RUN_AFTER = False
 
 # java 8 jdk bin directory location
-JDK_PATH = '/Library/Java/JavaVirtualMachines/zulu-8.jdk/Contents/Home/bin/'
+JDK_PATH = '/usr/lib/jvm/java-1.8.0-openjdk-amd64/bin/'
 
 ## Functions
 def sjexit(msg=None):

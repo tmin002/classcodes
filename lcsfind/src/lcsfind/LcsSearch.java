@@ -1,18 +1,20 @@
 package lcsfind;
 import java.io.*;
+import java.nio.file.Paths;
+import java.nio.file.Files;
 import java.util.ArrayList;
 
 public class LcsSearch {
 
-   // Wrapper of searchRecursive(). 
-   public static ArrayList<File> search(String fromPath, String fileName, int depth) {
-      if (depth == 0) {
-         depth--;
-      }
-      return searchRecursive(fromPath, fileName, depth);
+   // Infinite
+   public static final int INFINITE = -1;
+
+   // Wrapper of searchRecursive().
+   public static ArrayList<File> search(String fromPath, String fileName, int searchDepth) {
+      return searchRecursive(fromPath, fileName, 0, searchDepth);
    }
 
-   private static ArrayList<File> searchRecursive(String fromPath, String fileName, int depth) {
+   private static ArrayList<File> searchRecursive(String fromPath, String fileName, int depth, int maxDepth) {
 
       File from = new File(fromPath);
       ArrayList<File> result = new ArrayList<File>();
@@ -25,8 +27,8 @@ public class LcsSearch {
          if (checkFileNameLcsMatch(f.getName(), fileName)) {
             result.add(f);
          }
-         if (f.isDirectory() && depth != 0) {
-            result.addAll(searchRecursive(f.getAbsolutePath(), fileName, depth--));
+         if (f.isDirectory() && depth != maxDepth) {
+            result.addAll(searchRecursive(f.getAbsolutePath(), fileName, depth+1, maxDepth));
          } 
       }
 

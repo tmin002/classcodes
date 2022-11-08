@@ -2,6 +2,9 @@ package lcsfind.gui;
 
 import java.io.*;
 import javax.swing.*;
+
+import lcsfind.LcsSearch;
+
 import java.awt.*;
 
 public class MainWindow extends JFrame {
@@ -9,11 +12,12 @@ public class MainWindow extends JFrame {
     private JLabel fileNameLabel = new JLabel("File name to search: ");
     private JLabel fromPathLabel = new JLabel("Search from: ");
     private JLabel depthLabel = new JLabel("Search depth: ");
+    private JLabel totalLabel = new JLabel("");
 
 
-    private JTextField fileNameText = new JTextField("", 50);
-    private JTextField fromPathText = new JTextField("", 50);
-    private JSlider depthSlider = new JSlider(JSlider.HORIZONTAL, 1, 31, 5);
+    private JTextField fileNameText = new JTextField("App.tsx", 50);
+    private JTextField fromPathText = new JTextField("/Users/tmin002/workspace", 50);
+    private JSlider depthSlider = new JSlider(JSlider.HORIZONTAL, 0, 21, 5);
     private JLabel depthSliderLabel = new JLabel(String.valueOf(depthSlider.getValue()));
     private JButton fromPathButton = new JButton("..");
 
@@ -49,7 +53,7 @@ public class MainWindow extends JFrame {
         //// fromPathText
         rootLayout.putConstraint(SpringLayout.WEST, fromPathText, 0, SpringLayout.EAST, fromPathLabel);
         rootLayout.putConstraint(SpringLayout.EAST, fromPathText, 0, SpringLayout.WEST, fromPathButton);
-        rootLayout.putConstraint(SpringLayout.NORTH, fromPathText, 0, SpringLayout.SOUTH, fileNameText);
+        rootLayout.putConstraint(SpringLayout.NORTH, fromPathText, 10, SpringLayout.SOUTH, fileNameText);
         root.add(fromPathText);
 
         //// depthLabel
@@ -60,7 +64,7 @@ public class MainWindow extends JFrame {
         //// depthSlider
         rootLayout.putConstraint(SpringLayout.WEST, depthSlider, 0, SpringLayout.EAST, depthLabel);
         rootLayout.putConstraint(SpringLayout.EAST, depthSlider, -15, SpringLayout.WEST, depthSliderLabel);
-        rootLayout.putConstraint(SpringLayout.NORTH, depthSlider, 0, SpringLayout.SOUTH, fromPathText);
+        rootLayout.putConstraint(SpringLayout.NORTH, depthSlider, 10, SpringLayout.SOUTH, fromPathText);
         depthSlider.addChangeListener(e -> {
             if (depthSlider.getValue() == depthSlider.getMaximum()) {
                 depthSliderLabel.setText("infinite");
@@ -69,6 +73,7 @@ public class MainWindow extends JFrame {
             }
         });
         root.add(depthSlider);
+
 
         //// depthSliderLabel
         rootLayout.putConstraint(SpringLayout.WEST, depthSliderLabel, 15, SpringLayout.WEST, fromPathButton);
@@ -99,7 +104,10 @@ public class MainWindow extends JFrame {
         doSearchButton.addActionListener(e -> doSearch());
         root.add(doSearchButton);
 
-        //// errorLabel
+        //// totalLabel
+        rootLayout.putConstraint(SpringLayout.SOUTH, totalLabel, -10, SpringLayout.SOUTH, root);
+        rootLayout.putConstraint(SpringLayout.WEST, totalLabel, 15, SpringLayout.WEST, root);
+        root.add(totalLabel);
 
         // final
         setSize(500, 500);
@@ -139,7 +147,7 @@ public class MainWindow extends JFrame {
         int i = 0;
         int depth = depthSlider.getValue();
         if (depth == depthSlider.getMaximum()) {
-            depth = 0;
+            depth = LcsSearch.INFINITE;
         }
 
         for (File f : lcsfind.LcsSearch.search(fromPath, fileName, depth)) {
@@ -150,9 +158,7 @@ public class MainWindow extends JFrame {
         } 
 
         // finish
-        if (i == 0) {
-            MsgBox.show("No file/folder found.");
-        }
+        totalLabel.setText("total " + i);
         resultPanel.setPreferredSize(new Dimension(this.getSize().width, i*40));
         updateResultPanel();
     }

@@ -1,4 +1,6 @@
 package lcsfind;
+import lcsfind.gui.SearchProgressListener;
+
 import java.io.*;
 import java.nio.file.Paths;
 import java.nio.file.Files;
@@ -9,30 +11,64 @@ public class LcsSearch {
    // Infinite
    public static final int INFINITE = -1;
 
-   // Wrapper of searchRecursive().
-   public static ArrayList<File> search(String fromPath, String fileName, int searchDepth) {
-      return searchRecursive(fromPath, fileName, 0, searchDepth);
+   // Member variables
+   private final String searchPath;
+   private final String searchFileName;
+   private final int searchMaxDepth;
+   private final SearchProgressListener listener;
+
+   // Thread related
+   private Thread searchThread;
+   private boolean die = false; // kill thread if true
+
+   // File counters
+   private int foundFilesCount = 0;
+   private int searchedFilesCount = 0;
+
+   // Constructor
+   public LcsSearch(String searchPath, String searchFileName, int searchMaxDepth, SearchProgressListener listener) {
+      this.searchPath = searchPath;
+      this.searchFileName = searchFileName;
+      this.searchMaxDepth = searchMaxDepth;
+      this.listener = listener;
    }
 
-   private static ArrayList<File> searchRecursive(String fromPath, String fileName, int depth, int maxDepth) {
+   // Wrapper of searchRecursive().
+   public void startSearchAsync() {
+      searchThread = new Thread(() -> {
+         searchRecursive(searchPath, searchFileName, 0);
+         listener.onSearchFinished(this.die);
+      });
+      searchThread.start();
+   }
+
+   public void stopSearch() {
+      try {
+         die = true;
+         searchThread.join();
+      } catch (InterruptedException ignored) {}
+   }
+
+   private void searchRecursive(String fromPath, String fileName, int depth) {
 
       File from = new File(fromPath);
-      ArrayList<File> result = new ArrayList<File>();
       File[] ls = from.listFiles();
 
       if (ls == null)
-         return result;
+         return;
 
       for (File f : ls) {
+         listener.onFileSearching(f, ++searchedFilesCount);
          if (checkFileNameLcsMatch(f.getName(), fileName)) {
-            result.add(f);
+            listener.onFileFound(f, ++foundFilesCount);
          }
-         if (f.isDirectory() && depth != maxDepth) {
-            result.addAll(searchRecursive(f.getAbsolutePath(), fileName, depth+1, maxDepth));
-         } 
+         if (f.isDirectory() && depth != searchMaxDepth) {
+            searchRecursive(f.getAbsolutePath(), fileName, depth+1);
+         }
+         if (die) {
+            return;
+         }
       }
-
-      return result;
    }
 
    public static boolean checkFileNameLcsMatch(String fileName1, String fileName2) {
@@ -41,7 +77,7 @@ public class LcsSearch {
       int f2l = fileName2.length();
       int i=0, j=0;
 
-	  // Case insensitive
+	  // Change to be case-insensitive
 	  fileName1 = fileName1.toLowerCase();
 	  fileName2 = fileName2.toLowerCase();
 

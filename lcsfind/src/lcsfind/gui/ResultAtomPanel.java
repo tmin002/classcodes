@@ -5,6 +5,7 @@ import javax.swing.*;
 import java.io.IOException;
 import java.awt.event.*;
 import java.awt.*;
+import java.util.Objects;
 
 public class ResultAtomPanel extends JPanel {
 
@@ -26,7 +27,9 @@ public class ResultAtomPanel extends JPanel {
         // thumbnail
         JLabel thumbnail = new JLabel();
         String imgDir = file.isFile() ? "file" : "folder";
-        thumbnail.setIcon(new ImageIcon(getClass().getResource("/lcsfind/resources/" + imgDir + ".png")));
+        thumbnail.setIcon(new ImageIcon(
+                Objects.requireNonNull(
+                        getClass().getResource("/lcsfind/resources/" + imgDir + ".png"))));
         thumbnail.setBounds(0, 0, 30, 30);
         thumbnail.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         thumbnail.addMouseListener(clickMa);
@@ -64,12 +67,12 @@ public class ResultAtomPanel extends JPanel {
             } else if (os == CheckOS.OS.MAC) {
                 cmd = new String[] {"open", filePath};
             } else {
-                MsgBox.show("Opening files in this operating system is not supported yet.");
+                MsgBox.showError("Opening files in this operating system is not supported yet.");
                 return;
             }
             Runtime.getRuntime().exec(cmd);            
         } catch (IOException e) {
-            MsgBox.show("error while opening file" + filePath + "\n" + e + ": " + e.getMessage());
+            MsgBox.showError("error while opening file" + filePath + "\n" + e + ": " + e.getMessage());
         }
 
     }

@@ -219,9 +219,6 @@ public class MainWindow extends JFrame implements SearchProgressListener {
     @Override
     public void onSearchFinished(boolean killed) {
         updateStatusText("done");
-        if (!killed) {
-            MsgBox.showInfo("search done!\nfound " + foundCount + " files from " +searchCount + " files");
-        }
         doSearchButton.setText("search");
     }
 }

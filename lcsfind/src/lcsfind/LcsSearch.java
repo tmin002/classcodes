@@ -1,10 +1,6 @@
 package lcsfind;
-import lcsfind.gui.SearchProgressListener;
 
 import java.io.*;
-import java.nio.file.Paths;
-import java.nio.file.Files;
-import java.util.ArrayList;
 
 public class LcsSearch {
 
@@ -15,7 +11,7 @@ public class LcsSearch {
    private final String searchPath;
    private final String searchFileName;
    private final int searchMaxDepth;
-   private final SearchProgressListener listener;
+   private final LcsSearchListener listener;
 
    // Thread related
    private Thread searchThread;
@@ -26,7 +22,7 @@ public class LcsSearch {
    private int searchedFilesCount = 0;
 
    // Constructor
-   public LcsSearch(String searchPath, String searchFileName, int searchMaxDepth, SearchProgressListener listener) {
+   public LcsSearch(String searchPath, String searchFileName, int searchMaxDepth, LcsSearchListener listener) {
       this.searchPath = searchPath;
       this.searchFileName = searchFileName;
       this.searchMaxDepth = searchMaxDepth;

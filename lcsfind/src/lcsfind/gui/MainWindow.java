@@ -4,11 +4,12 @@ import java.io.*;
 import javax.swing.*;
 
 import lcsfind.LcsSearch;
+import lcsfind.LcsSearchListener;
 
 import java.awt.*;
 import java.util.Objects;
 
-public class MainWindow extends JFrame implements SearchProgressListener {
+public class MainWindow extends JFrame implements LcsSearchListener {
 
     private JLabel fileNameLabel = new JLabel("File name to search: ");
     private JLabel fromPathLabel = new JLabel("Search from: ");
@@ -210,6 +211,7 @@ public class MainWindow extends JFrame implements SearchProgressListener {
         resultPanel.add(p);
         resultPanel.setPreferredSize(new Dimension(this.getSize().width, foundCount*40));
         updateStatusText(f.getAbsolutePath());
+        updateResultPanel();
     }
     @Override
     public void onFileSearching(File f, int searchCount) {
@@ -217,8 +219,14 @@ public class MainWindow extends JFrame implements SearchProgressListener {
         updateStatusText(f.getAbsolutePath());
     }
     @Override
-    public void onSearchFinished(boolean killed) {
+    public void onSearchFinished(boolean isKilled) {
         updateStatusText("done");
         doSearchButton.setText("search");
+        updateResultPanel();
+        if (isKilled) {
+            MsgBox.showError("Search canceled.\n" + "found " + foundCount + " files from " + searchCount + ".");
+        } else {
+            MsgBox.showInfo("Search finished!\n" + "found " + foundCount + " files from " + searchCount + ".");
+        }
     }
 }

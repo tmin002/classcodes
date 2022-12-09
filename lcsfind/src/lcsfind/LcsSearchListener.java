@@ -1,9 +1,9 @@
-package lcsfind.gui;
+package lcsfind;
 
 import java.io.File;
 
-public interface SearchProgressListener {
+public interface LcsSearchListener {
     void onFileFound(File foundFile, int foundFileCount);
     void onFileSearching(File searchingFile, int searchedFileCount);
-    void onSearchFinished(boolean killed);
+    void onSearchFinished(boolean isKilled);
 }
